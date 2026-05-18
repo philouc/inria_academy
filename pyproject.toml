@@ -1,11 +1,26 @@
 [project]
 name = "inria_academy"
 version = "0.1.0"
-description = "Training on advanced signal processing tools"
+description = "Inria Academy — training on advanced signal processing methods"
+readme = "README.md"
 requires-python = ">=3.11"
+license = { text = "CC-BY-NC-ND-4.0" }
+authors = [
+    { name = "Philippe Ciuciu", email = "philippe.ciuciu@inria.fr" },
+]
+keywords = [
+    "signal processing",
+    "time-frequency analysis",
+    "wavelets",
+    "EMD",
+    "VMD",
+    "synchrosqueezing",
+]
+
 dependencies = [
     "numpy>=2.3.0",
     "scipy>=1.17.1",
+    "matplotlib>=3.9",
     "EMD-signal==1.9.0",
     "PyWavelets==1.8.0",
     "ssqueezepy==0.6.6",

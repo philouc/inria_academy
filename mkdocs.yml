@@ -1,6 +1,33 @@
-site_name: Inria Academy (Advanced Signal Processing Tools)
+site_name: Inria Academy — Advanced Signal Processing Tools
+site_description: Training material for advanced signal processing methods
+site_author: Philippe Ciuciu
+site_url: https://philouc.github.io/inria_academy/
+repo_url: https://github.com/philouc/inria_academy
+repo_name: philouc/inria_academy
+
 theme:
   name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
 plugins:
   - search
   - mkdocstrings
@@ -13,4 +40,4 @@ nav:
   - Accueil: index.md
   - Guide: usage.md
   - Gallery: generated/gallery
-  - Référence API: reference.md
+  - Rerence: reference.md
