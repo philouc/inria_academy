@@ -12,4 +12,16 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff", "mkdocs-material", "mkdocstrings[python]"]
+dev = [
+    "pytest", "ruff", 
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "pymdown-extensions",
+]
+
+[dependency-groups]
+dev = [
+    "mkdocs-material>=9.7.6",
+    "mkdocstrings[python]>=1.0.4",
+    "pdoc>=16.0.0",
+]

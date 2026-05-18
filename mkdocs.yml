@@ -1,0 +1,10 @@
+site_name: Inria Academy (Advanced Signal Processing Tools)
+theme:
+  name: material
+plugins:
+  - search
+  - mkdocstrings
+nav:
+  - Accueil: index.md
+  - Guide: usage.md
+  - Référence API: reference.md
