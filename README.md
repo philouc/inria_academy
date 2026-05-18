@@ -25,7 +25,7 @@ dépendances sont installées à partir de `pyproject.toml` / `uv.lock`.
 ## Utilisation
 
 ```bash
-uv run python -m         # paradigme Go/NoGo standard
+uv run python -m         # signal processing tools
 ```
 
 
