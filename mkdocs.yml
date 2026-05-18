@@ -4,7 +4,13 @@ theme:
 plugins:
   - search
   - mkdocstrings
+  - gallery:
+      examples_dirs: src
+      gallery_dirs: docs/generated/gallery
+      filename_pattern: ".*"
+      ignore_pattern: ".*(__init__|mvmd\\.py|swt_emd_helpers\\.py).*"
 nav:
   - Accueil: index.md
   - Guide: usage.md
+  - Gallery: generated/gallery
   - Référence API: reference.md

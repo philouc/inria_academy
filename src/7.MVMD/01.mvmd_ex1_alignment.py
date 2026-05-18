@@ -32,7 +32,7 @@ import matplotlib as mpl
 from matplotlib import gridspec
 from vmdpy import VMD
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(sys.argv[0])))
 from mvmd import MVMD
 
 NAVY  = "#0b1f3a"

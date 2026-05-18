@@ -167,6 +167,10 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# Generated gallery images, script pages, and API docs
+docs/generated/
+docs/reference/
+
 # mypy
 .mypy_cache/
 .dmypy.json
