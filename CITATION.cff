@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "Inria Academy — Advanced Signal Processing Tools"
+message: "If you use this material in academic work, please cite it as below."
+type: software
+authors:
+  - given-names: Philippe
+    family-names: Ciuciu
+    affiliation: "Inria, NeuroSpin"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # add your ORCID here
+repository-code: "https://github.com/philouc/inria_academy"
+url: "https://philouc.github.io/inria_academy/"
+abstract: >
+  Training material for advanced signal processing methods, covering
+  Fourier and wavelet foundations, time-frequency representations
+  (STFT, WVD/SPWVD), empirical mode decomposition (EMD, EEMD,
+  CEEMDAN), the synchrosqueezing wavelet transform (SST), and
+  variational mode decomposition in its univariate (VMD) and
+  multivariate (MVMD) forms.
+keywords:
+  - signal processing
+  - time-frequency analysis
+  - wavelets
+  - empirical mode decomposition
+  - synchrosqueezing
+  - variational mode decomposition
+  - teaching material
+license: CC-BY-NC-ND-4.0
+version: "0.1.0"
+date-released: 2026-05-19
