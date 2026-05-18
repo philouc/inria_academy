@@ -19,6 +19,7 @@ Usage:     python scenario2b_four_methods.py            # interactive
            python scenario2b_four_methods.py out.png    # save to file
 """
 import sys
+import os
 import time
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,6 +27,8 @@ import matplotlib as mpl
 from matplotlib import gridspec
 from matplotlib.colors import LogNorm
 from PyEMD import EMD, EEMD, CEEMDAN
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(sys.argv[0])))
 
 from swt_emd_helpers import NAVY, LIME, DARK_BG, compute_sst, hilbert_spectrum
 from scenario2_close_frequencies import make_signal

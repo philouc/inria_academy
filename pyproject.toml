@@ -28,10 +28,19 @@ dependencies = [
     "neurokit2>=0.2.10",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest", "ruff",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "mkdocs-gallery",
+    "pymdown-extensions",
+]
+
 [dependency-groups]
 dev = [
-    "pytest>=8.0",
-    "ruff>=0.5",
-    "mkdocs-material>=9.7",
-    "pymdown-extensions>=10.0",
+    "mkdocs-material>=9.7.6",
+    "mkdocstrings[python]>=1.0.4",
+    "mkdocs-gallery",
+    "pdoc>=16.0.0",
 ]

@@ -10,8 +10,31 @@ dist/
 # ─── Virtual environments ────────────────────────────────────────────────────
 .venv/
 venv/
-env/
-.python-version
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# Generated gallery images, script pages, and API docs
+docs/generated/
+docs/reference/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
 
 # ─── Jupyter ─────────────────────────────────────────────────────────────────
 .ipynb_checkpoints/

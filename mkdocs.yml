@@ -30,21 +30,14 @@ theme:
 
 plugins:
   - search
-
-markdown_extensions:
-  - admonition
-  - attr_list
-  - tables
-  - toc:
-      permalink: true
-  - pymdownx.details
-  - pymdownx.superfences
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
-
+  - mkdocstrings
+  - gallery:
+      examples_dirs: src
+      gallery_dirs: docs/generated/gallery
+      filename_pattern: ".*"
+      ignore_pattern: ".*(__init__|mvmd\\.py|swt_emd_helpers\\.py).*"
 nav:
-  - Home: index.md
-  - Usage: usage.md
-  - Reference: reference.md
+  - Accueil: index.md
+  - Guide: usage.md
+  - Gallery: generated/gallery
+  - Rerence: reference.md
