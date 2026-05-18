@@ -8,7 +8,9 @@ dependencies = [
     "scipy>=1.17.1",
     "EMD-signal==1.9.0",
     "PyWavelets==1.8.0",
-    "ssqueezepy==0.6.6"
+    "ssqueezepy==0.6.6",
+    "vmdpy>=1.4.2",
+    "neurokit2>=0.2.10",
 ]
 
 [project.optional-dependencies]

@@ -22,12 +22,13 @@ Usage:  python mvmd_ex5_ctg.py            # interactive
         python mvmd_ex5_ctg.py out.png    # save
 """
 import sys
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib import gridspec
 
-sys.path.insert(0, "/home/claude")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from mvmd import MVMD
 
 NAVY   = "#0b1f3a"
