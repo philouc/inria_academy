@@ -1,31 +1,39 @@
-# Inria Academy — Signal Processing Demonstrations
+# Inria Academy — Advanced Signal Processing Tools
 
-A collection of self-contained Python demonstrations covering time-frequency analysis,
-decomposition methods, and their applications to biomedical signals.
+Training material for advanced signal processing methods.
 
-## Topics
+The course starts from Fourier and wavelet foundations and progressively
+introduces tools dedicated to the analysis of **non-stationary** and
+**multi-component** signals: STFT, WVD/SPWVD, EMD/EEMD/CEEMDAN, the
+synchrosqueezing wavelet transform (SST/SWT), VMD, and its multivariate
+extension MVMD.
 
-| # | Topic | Methods |
-|---|---|---|
-| 1 | Fourier Basics | FFT, spectral filtering |
-| 2 | Wavelets | CWT, wavelet bases, time-frequency tiling, denoising |
-| 3 | Time-Frequency Distributions | STFT, Wigner-Ville, Smooth Wigner-Ville |
-| 4 | EMD Family | EMD, EEMD, CEEMDAN, mode mixing |
-| 5 | SWT | Stationary Wavelet Transform + EMD hybrids |
-| 6 | VMD | Variational Mode Decomposition |
-| 7 | MVMD | Multivariate VMD |
+Each module is a self-contained directory of numbered Python scripts that
+can be executed independently to reproduce every figure and result.
 
-## Quick Start
+## Course outline
 
-```bash
-uv sync
-uv run python src/1.Reminder_Fourier/spectral_filtering_demo.py
-```
+| # | Module | Topic |
+|---|--------|-------|
+| 1 | `1.Reminder_Fourier` | Fourier analysis — spectral filtering refresher |
+| 2 | `2.Reminder_Wavelets` | Wavelet bases, time-frequency tiling, long-memory processes, denoising |
+| 3 | `3.STFT_WVD_SPWVD` | Short-Time Fourier and Wigner-Ville distributions |
+| 4 | `4.EMD_EEMD_CEEMDAN` | Empirical Mode Decomposition and its noise-assisted variants |
+| 5 | `5.SWT` | Synchrosqueezing wavelet transform, compared against EMD |
+| 6 | `6.VMD` | Variational Mode Decomposition |
+| 7 | `7.MVMD` | Multivariate VMD on multichannel signals (EEG, biosignals) |
 
-Each script is self-contained and generates PNG figures alongside the source file.
+## Getting started
 
-## Documentation
+- [Usage guide](usage.md) — installation, environment, how to run a script
+- [Reference](reference.md) — annotated index of every script
 
-- [Usage](usage.md) — setup and prerequisites
-- [Gallery](gallery.md) — all demos with generated figures
-- [API Reference](reference.md) — library modules
+## Author
+
+Philippe Ciuciu — Inria, NeuroSpin.
+
+## License
+
+The pedagogical material (slides, figures, written notes) is released under
+[CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/).
+See [`LICENSE`](https://github.com/philouc/inria_academy/blob/main/LICENSE).

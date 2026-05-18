@@ -27,7 +27,6 @@ Usage:     python scenario2c_vmd_close_freq.py            # interactive
            python scenario2c_vmd_close_freq.py out.png    # save to file
 """
 import sys
-import os
 import time
 import numpy as np
 import matplotlib.pyplot as plt
@@ -36,8 +35,6 @@ from matplotlib import gridspec
 from matplotlib.colors import LogNorm
 from PyEMD import EMD, EEMD, CEEMDAN
 from vmdpy import VMD
-
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), '..', '5.SWT'))
 
 from swt_emd_helpers import NAVY, LIME, DARK_BG, compute_sst, hilbert_spectrum
 from scenario2_close_frequencies import make_signal

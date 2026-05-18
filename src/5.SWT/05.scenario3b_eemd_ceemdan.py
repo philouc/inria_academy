@@ -20,7 +20,6 @@ Usage:     python scenario3b_eemd_ceemdan.py            # interactive display
            python scenario3b_eemd_ceemdan.py out.png    # save to file instead
 """
 import sys
-import os
 import time
 import numpy as np
 import matplotlib.pyplot as plt
@@ -31,9 +30,6 @@ from swt_emd_helpers import (
     NAVY, LIME, DARK_BG,
     hilbert_spectrum, _tf_imshow, _set_tf_axes, _overlay_true_if,
 )
-
-sys.path.insert(0, os.path.dirname(os.path.abspath(sys.argv[0])))
-
 from scenario3_chirp_tone_noise import make_signal
 
 
