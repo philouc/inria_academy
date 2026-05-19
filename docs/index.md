@@ -15,13 +15,13 @@ can be executed independently to reproduce every figure and result.
 
 | # | Module | Topic |
 |---|--------|-------|
-| 1 | `1.Reminder_Fourier` | Fourier analysis — spectral filtering refresher |
-| 2 | `2.Reminder_Wavelets` | Wavelet bases, time-frequency tiling, long-memory processes, denoising |
-| 3 | `3.STFT_WVD_SPWVD` | Short-Time Fourier and Wigner-Ville distributions |
-| 4 | `4.EMD_EEMD_CEEMDAN` | Empirical Mode Decomposition and its noise-assisted variants |
-| 5 | `5.SWT` | Synchrosqueezing wavelet transform, compared against EMD |
-| 6 | `6.VMD` | Variational Mode Decomposition |
-| 7 | `7.MVMD` | Multivariate VMD on multichannel signals (EEG, biosignals) |
+| 1 | `1_Reminder_Fourier` | Fourier analysis — spectral filtering refresher |
+| 2 | `2_Reminder_Wavelets` | Wavelet bases, time-frequency tiling, long-memory processes, denoising |
+| 3 | `3_STFT_WVD_SPWVD` | Short-Time Fourier and Wigner-Ville distributions |
+| 4 | `4_EMD_EEMD_CEEMDAN` | Empirical Mode Decomposition and its noise-assisted variants |
+| 5 | `5_SWT` | Synchrosqueezing wavelet transform, compared against EMD |
+| 6 | `6_VMD` | Variational Mode Decomposition |
+| 7 | `7_MVMD` | Multivariate VMD on multichannel signals (EEG, biosignals) |
 
 ## Getting started
 

@@ -25,15 +25,13 @@ Usage:  python mvmd_ex1_alignment.py            # interactive
         python mvmd_ex1_alignment.py out.png    # save figure
 """
 import sys
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib import gridspec
 from vmdpy import VMD
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from mvmd import MVMD
+from inria_academy.utils.mvmd import MVMD
 
 NAVY  = "#0b1f3a"
 RED   = "#c9191e"

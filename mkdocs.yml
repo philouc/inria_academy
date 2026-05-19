@@ -24,12 +24,23 @@ theme:
   features:
     - navigation.instant
     - navigation.tracking
+    - navigation.sections
     - content.code.copy
     - search.suggest
     - search.highlight
 
 plugins:
   - search
+  - gallery:
+      examples_dirs: examples
+      gallery_dirs: docs/generated/gallery
+      filename_pattern: ".*\\.py$"          # match all .py (defaults to plot_*.py)
+      run_stale_examples: False
+      plot_gallery: false                   # ← flip to true once you have time
+      abort_on_example_error: False
+      only_warn_on_example_error: True
+      thumbnail_size: [400, 280]
+      download_all_examples: True
 
 markdown_extensions:
   - admonition
@@ -47,4 +58,5 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Usage: usage.md
+  - Examples: generated/gallery
   - Reference: reference.md

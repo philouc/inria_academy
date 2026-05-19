@@ -14,7 +14,7 @@ Usage:     python scenario1_chirp_tone.py            # interactive display
            python scenario1_chirp_tone.py out.png    # save to file instead
 """
 import numpy as np
-from swt_emd_helpers import compute_sst, compute_emd_hht, plot_comparison
+from inria_academy.utils.swt_emd import compute_sst, compute_emd_hht, plot_comparison
 
 
 def make_signal():

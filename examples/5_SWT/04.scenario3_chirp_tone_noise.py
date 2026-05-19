@@ -18,27 +18,8 @@ Usage:     python scenario3_chirp_tone_noise.py            # interactive display
            python scenario3_chirp_tone_noise.py out.png    # save to file instead
 """
 import numpy as np
-from swt_emd_helpers import compute_sst, compute_emd_hht, plot_comparison
-
-
-def make_signal(seed=0):
-    """Scenario 1 signal + AWGN at 0 dB SNR."""
-    fs, T = 400.0, 4.0
-    t = np.arange(int(fs * T)) / fs
-    f0, f1 = 5.0, 30.0
-    chirp_phase = 2 * np.pi * (f0 * t + (f1 - f0) / (2 * T) * t**2)
-    clean = np.cos(chirp_phase) + np.cos(2 * np.pi * 60.0 * t)
-    # AWGN at 0 dB
-    rng = np.random.default_rng(seed)
-    sig_pow = np.mean(clean**2)
-    noise = rng.standard_normal(len(t))
-    noise *= np.sqrt(sig_pow / np.mean(noise**2))   # match noise power to signal power
-    x = clean + noise
-    true_if = {
-        "chirp": f0 + (f1 - f0) / T * t,
-        "tone":  60.0 * np.ones_like(t),
-    }
-    return t, x, fs, true_if
+from inria_academy.utils.signals import chirp_tone_noise as make_signal
+from inria_academy.utils.swt_emd import compute_sst, compute_emd_hht, plot_comparison
 
 
 def main(savepath=None):

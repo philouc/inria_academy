@@ -26,11 +26,11 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib import gridspec
 from PyEMD import EMD, EEMD, CEEMDAN
-from swt_emd_helpers import (
+from inria_academy.utils.swt_emd import (
     NAVY, LIME, DARK_BG,
     hilbert_spectrum, _tf_imshow, _set_tf_axes, _overlay_true_if,
 )
-from scenario3_chirp_tone_noise import make_signal
+from inria_academy.utils.signals import chirp_tone_noise as make_signal
 
 
 def keep_significant(imfs, thresh=0.01):

@@ -36,8 +36,8 @@ from matplotlib.colors import LogNorm
 from PyEMD import EMD, EEMD, CEEMDAN
 from vmdpy import VMD
 
-from swt_emd_helpers import NAVY, LIME, DARK_BG, compute_sst, hilbert_spectrum
-from scenario2_close_frequencies import make_signal
+from inria_academy.utils.swt_emd import NAVY, LIME, DARK_BG, compute_sst, hilbert_spectrum
+from inria_academy.utils.signals import close_frequencies as make_signal
 
 
 mpl.rcParams.update({

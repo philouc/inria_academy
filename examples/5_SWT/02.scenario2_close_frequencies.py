@@ -15,20 +15,8 @@ Usage:     python scenario2_close_frequencies.py            # interactive displa
            python scenario2_close_frequencies.py out.png    # save to file instead
 """
 import numpy as np
-from swt_emd_helpers import compute_sst, compute_emd_hht, plot_comparison
-
-
-def make_signal():
-    """25 Hz + 32 Hz tones, equal amplitude."""
-    fs, T = 400.0, 4.0
-    t = np.arange(int(fs * T)) / fs
-    f1, f2 = 25.0, 32.0
-    x = np.cos(2 * np.pi * f1 * t) + np.cos(2 * np.pi * f2 * t)
-    true_if = {
-        "tone1": f1 * np.ones_like(t),
-        "tone2": f2 * np.ones_like(t),
-    }
-    return t, x, fs, true_if
+from inria_academy.utils.signals import close_frequencies as make_signal
+from inria_academy.utils.swt_emd import compute_sst, compute_emd_hht, plot_comparison
 
 
 def main(savepath=None):

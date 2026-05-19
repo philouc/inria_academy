@@ -1,0 +1,45 @@
+name: Deploy documentation
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed for mkdocs gh-deploy to push to gh-pages branch
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history so gh-deploy can compute revision info
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Build documentation
+        # plot_gallery is "False" in mkdocs.yml by default — flip it here
+        # to "True" once you are ready for the heavier build (it executes
+        # every example to render figures). Comment out the override
+        # below to use the value from mkdocs.yml.
+        env:
+          MPLBACKEND: Agg
+        run: uv run mkdocs build --strict
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          uv run mkdocs gh-deploy --force --no-history

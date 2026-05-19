@@ -33,11 +33,11 @@ uv sync --group dev
 
 ## Usage
 
-Each script under `src/` is a self-contained demo. Pick one and run it:
+Each script under `examples/` is a self-contained demo. Pick one and run it:
 
 ```bash
-uv run python src/1.Reminder_Fourier/spectral_filtering_demo.py
-uv run python src/7.MVMD/04.mvmd_ex4_alpha_eeg.py
+uv run python examples/1_Reminder_Fourier/spectral_filtering_demo.py
+uv run python examples/7_MVMD/04.mvmd_ex4_alpha_eeg.py
 ```
 
 See the [usage guide](docs/usage.md) for more details.
@@ -47,14 +47,18 @@ See the [usage guide](docs/usage.md) for more details.
 ```
 inria_academy/
 ├── docs/                       MkDocs documentation sources
-├── src/
-│   ├── 1.Reminder_Fourier/     Fourier domain refresher
-│   ├── 2.Reminder_Wavelets/    Wavelet bases, denoising, long memory
-│   ├── 3.STFT_WVD_SPWVD/       Short-Time Fourier & Wigner-Ville
-│   ├── 4.EMD_EEMD_CEEMDAN/     Empirical mode decomposition family
-│   ├── 5.SWT/                  Synchrosqueezing wavelet transform
-│   ├── 6.VMD/                  Variational mode decomposition
-│   └── 7.MVMD/                 Multivariate VMD (multichannel signals)
+├── examples/                   Demo scripts (the gallery)
+│   ├── 1_Reminder_Fourier/     Fourier domain refresher
+│   ├── 2_Reminder_Wavelets/    Wavelet bases, denoising, long memory
+│   ├── 3_STFT_WVD_SPWVD/       Short-Time Fourier & Wigner-Ville
+│   ├── 4_EMD_EEMD_CEEMDAN/     Empirical mode decomposition family
+│   ├── 5_SWT/                  Synchrosqueezing wavelet transform
+│   ├── 6_VMD/                  Variational mode decomposition
+│   └── 7_MVMD/                 Multivariate VMD (multichannel signals)
+├── src/inria_academy/          Importable package (shared helpers)
+│   └── utils/
+│       ├── mvmd.py             Reference MVMD implementation
+│       └── swt_emd.py          SST / EMD-HHT comparison helpers
 ├── pyproject.toml              Project metadata and dependencies
 ├── uv.lock                     Locked dependency versions (reproducibility)
 └── README.md                   This file

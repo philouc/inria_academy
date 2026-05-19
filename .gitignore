@@ -44,3 +44,6 @@ Thumbs.db
 # figures/
 # *.png
 # *.pdf
+
+# ─── mkdocs-gallery generated output ─────────────────────────────────────────
+docs/generated/

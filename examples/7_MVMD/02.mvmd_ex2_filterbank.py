@@ -15,14 +15,12 @@ Usage:  python mvmd_ex2_filterbank.py            # interactive
         python mvmd_ex2_filterbank.py out.png    # save
 """
 import sys
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib import gridspec
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from mvmd import MVMD
+from inria_academy.utils.mvmd import MVMD
 
 NAVY   = "#0b1f3a"
 RED    = "#c9191e"

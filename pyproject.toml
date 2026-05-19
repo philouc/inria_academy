@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "inria_academy"
 version = "0.1.0"
@@ -33,5 +37,28 @@ dev = [
     "pytest>=8.0",
     "ruff>=0.5",
     "mkdocs-material>=9.7",
+    "mkdocs-gallery>=0.10",
     "pymdown-extensions>=10.0",
 ]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/inria_academy"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/inria_academy",
+    "examples",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "CITATION.cff",
+    "mkdocs.yml",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]

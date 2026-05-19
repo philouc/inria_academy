@@ -30,13 +30,13 @@ uv sync --group dev
 
 ## Running a script
 
-Each script in `src/` is fully self-contained — pick one, run it, get the
+Each script in `examples/` is fully self-contained — pick one, run it, get the
 figure.
 
 ```bash
-uv run python src/1.Reminder_Fourier/spectral_filtering_demo.py
-uv run python src/2.Reminder_Wavelets/00.morlet_params.py
-uv run python src/7.MVMD/04.mvmd_ex4_alpha_eeg.py
+uv run python examples/1_Reminder_Fourier/spectral_filtering_demo.py
+uv run python examples/2_Reminder_Wavelets/00.morlet_params.py
+uv run python examples/7_MVMD/04.mvmd_ex4_alpha_eeg.py
 ```
 
 Most scripts open a matplotlib window. If you are on a headless server,
@@ -50,9 +50,9 @@ export MPLBACKEND=Agg
 
 Two modules contain reusable building blocks rather than runnable demos:
 
-- `src/5.SWT/swt_emd_helpers.py` — shared helpers (SST computation, EMD-HHT,
+- `src/inria_academy/utils/swt_emd.py` — shared helpers (SST computation, EMD-HHT,
   comparison plot) used by every scenario in module 5
-- `src/7.MVMD/mvmd.py` — a pure-Python reference implementation of MVMD
+- `src/inria_academy/utils/mvmd.py` — a pure-Python reference implementation of MVMD
   (ur Rehman & Aftab 2019) used by every example in module 7
 
 Both are imported by the demo scripts in their own directory; they are not

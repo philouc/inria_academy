@@ -1,10 +1,15 @@
 # Reference
 
-Annotated index of every script in `src/`. Each entry is a runnable demo
-unless marked *(helper)*.
+Annotated index of every demo in `examples/`. For the full rendered version
+with figures, code, and downloadable notebooks, see the [Examples](generated/gallery/index.md)
+gallery.
+
+This page is also available as a static fallback if the gallery build is
+disabled. Helper modules live in the importable package
+`inria_academy.utils` and are not listed here as runnable demos.
 
 Source files on GitHub:
-[philouc/inria_academy/tree/main/src](https://github.com/philouc/inria_academy/tree/main/src)
+[philouc/inria_academy/tree/main/examples](https://github.com/philouc/inria_academy/tree/main/examples)
 
 ---
 
@@ -75,7 +80,6 @@ Synchrosqueezing wavelet transform, benchmarked against EMD-HHT.
 | `03.scenario2b_four_methods.py` | Close frequencies — SST vs the full EMD family |
 | `04.scenario3_chirp_tone_noise.py` | Scenario 3 — chirp + tone in noise |
 | `05.scenario3b_eemd_ceemdan.py` | Scenario 3b — noise-robust EMD variants under SST comparison |
-| `swt_emd_helpers.py` *(helper)* | Shared helpers: SST, EMD-HHT, 5-panel comparison plot |
 
 ---
 
@@ -106,7 +110,6 @@ Multivariate VMD on multichannel signals (ur Rehman & Aftab 2019).
 | `03.mvmd_ex3_orthogonality.py` | Example 3 — quasi-orthogonality of recovered modes |
 | `04.mvmd_ex4_alpha_eeg.py` | Example 4 — α rhythms in 4-channel EEG |
 | `05.mvmd_ex5_ctg.py` | Example 5 — cardiotocography (FHR + UC) |
-| `mvmd.py` *(helper)* | Pure-Python reference implementation of MVMD |
 
 ---
 

@@ -344,7 +344,7 @@ wheels = [
 [[package]]
 name = "inria-academy"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "emd-signal" },
     { name = "matplotlib" },
@@ -358,6 +358,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "mkdocs-gallery" },
     { name = "mkdocs-material" },
     { name = "pymdown-extensions" },
     { name = "pytest" },
@@ -378,6 +379,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "mkdocs-gallery", specifier = ">=0.10" },
     { name = "mkdocs-material", specifier = ">=9.7" },
     { name = "pymdown-extensions", specifier = ">=10.0" },
     { name = "pytest", specifier = ">=8.0" },
@@ -717,6 +719,21 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/bc/c6/bbd4f061bd16b378247f12953ffcb04786a618ce5e904b8c5a01a0309061/mkdocs-1.6.1.tar.gz", hash = "sha256:7b432f01d928c084353ab39c57282f29f92136665bdd6abf7c1ec8d822ef86f2", size = 3889159, upload-time = "2024-08-30T12:24:06.899Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/22/5b/dbc6a8cddc9cfa9c4971d59fb12bb8d42e161b7e7f8cc89e49137c5b279c/mkdocs-1.6.1-py3-none-any.whl", hash = "sha256:db91759624d1647f3f34aa0c3f327dd2601beae39a366d6e064c03468d35c20e", size = 3864451, upload-time = "2024-08-30T12:24:05.054Z" },
+]
+
+[[package]]
+name = "mkdocs-gallery"
+version = "0.10.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "mkdocs" },
+    { name = "mkdocs-material" },
+    { name = "packaging" },
+    { name = "tqdm" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/49/de/ceec460a00f47fc06676c9c2cbc9c95e12c9f85bafa9edbf5b309d392b3c/mkdocs_gallery-0.10.4.tar.gz", hash = "sha256:469f84a0c842ea87aa59e8679bd6237607f2a578788b50a50132abd9937d14d4", size = 423267, upload-time = "2024-09-30T08:31:06.435Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/00/b3/f6aa253503b3147238747672322503b2b529f390861f6184838d18abd51a/mkdocs_gallery-0.10.4-py2.py3-none-any.whl", hash = "sha256:8669d162b412714c52792f2959d4d211bf92bf5f820f5916c0686ff1ccd89806", size = 137833, upload-time = "2024-09-30T08:31:04.959Z" },
 ]
 
 [[package]]

@@ -35,7 +35,7 @@ from matplotlib import gridspec
 from matplotlib.colors import LogNorm
 from PyEMD import EMD, EEMD
 
-from swt_emd_helpers import NAVY, LIME, DARK_BG, compute_sst, hilbert_spectrum
+from inria_academy.utils.swt_emd import NAVY, LIME, DARK_BG, compute_sst, hilbert_spectrum
 
 # --- Palette ---------------------------------------------------------------
 RED    = "#c9191e"
