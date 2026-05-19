@@ -101,3 +101,4 @@ fig.suptitle(r"Influence de $\sigma$ et $c$ sur l'ondelette de Morlet  "
 out = "./morlet_sigma_c.png"
 fig.savefig(out, dpi=150, bbox_inches='tight', facecolor='white')
 print("Saved:", out)
+plt.show()

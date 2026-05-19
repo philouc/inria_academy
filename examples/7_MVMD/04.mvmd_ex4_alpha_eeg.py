@@ -154,6 +154,8 @@ def main(savepath=None):
                     facecolor="white")
         plt.close(fig)
         print(f"Saved: {savepath}")
+    else:
+        plt.show()
     return fig
 
 
