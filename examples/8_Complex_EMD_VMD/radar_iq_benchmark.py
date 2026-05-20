@@ -1,166 +1,211 @@
 """
 =======================================================================
- Complex-Valued Radar IQ Decomposition Benchmark
+ Complex-Valued IQ Decomposition Benchmark  (v2)
  ─────────────────────────────────────────────────────────────────────
- Compare 3 strategies on a synthetic CW-radar micro-Doppler signal
- (V. Chen-style model):
+ Four strategies compared on a synthetic complex signal with bilateral
+ spectrum (mimicking IQ data with both incoming AND outgoing targets):
 
-   Method 1 — REAL-PART-ONLY VMD       (naive, loses Doppler sign)
-   Method 2 — AUGMENTED EMD            (Tanaka et al.: concat Re, rev(Im))
-   Method 3 — SHIFT-AND-VMD (MCVMD)    (Hu et al. 2022 idea: shift the
-                                        spectrum to be unilateral, apply
-                                        standard VMD, shift back)
+   M1 — Naive REAL VMD on Re{s}                  (loses sign of Doppler)
+   M2 — Channel-wise VMD (I, Q independent)      (simplest complex-aware)
+   M3 — Bivariate EMD (Rilling–Flandrin 2007)    (rotating envelopes)
+   M4 — MCVMD (Hu et al. 2022)                   (upsample + shift + VMD)
 
- Test signal (complex IQ at f_s = 800 Hz, duration 2 s):
-   s(t) = A_body · exp(j 2π f_b t)              [body, +50 Hz Doppler]
-        + A_rotor · exp(j (f_dmax / f_r) · sin(2π f_r t))
-                                                 [blade, FM ±80 Hz @ 4 Hz]
-        + complex AWGN (SNR ≈ 15 dB)
+ Test signal  (length 2 s @ fs = 800 Hz):
+   s(t) = exp(+j 2π·30 t) + 0.7 · exp(-j 2π·40 t) + complex AWGN
+        = component A at +30 Hz  (approaching, amplitude 1.0)
+        + component B at -40 Hz  (receding,    amplitude 0.7)
 
- Run:        python radar_iq_benchmark.py
- Requires:   numpy, scipy, matplotlib, EMD-signal (PyEMD), vmdpy
+ Pedagogical point: a properly complex-aware decomposition recovers
+ each tone with the correct SIGN of the Doppler shift; the naive
+ real-only approach produces ±-symmetric mode spectra (sign lost).
 
- Author: Philippe Ciuciu
- Date:   2026-05
- Target: UnseenLabs / Inria Academy
+ Author: Philippe Ciuciu  ·  Target: UnseenLabs / Inria Academy
 =======================================================================
 """
-
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-from scipy.signal import stft, hilbert
-from PyEMD import EMD
+from scipy.signal import hilbert, resample, find_peaks
+from scipy.interpolate import CubicSpline
 from vmdpy import VMD
 
-np.random.seed(42)
+# ── CLI ───────────────────────────────────────────────────────────────
+# Default behaviour: pop up an interactive matplotlib window.
+# Pass `-s out.png` (or `--save out.png`) to write to disk instead.
+parser = argparse.ArgumentParser(
+    description="Complex-IQ decomposition benchmark — 4 methods compared.",
+    formatter_class=argparse.RawDescriptionHelpFormatter)
+parser.add_argument('-s', '--save', metavar='PATH', default=None,
+                    help='Save the figure to PATH (PNG) instead of displaying it.')
+parser.add_argument('--dpi', type=int, default=140,
+                    help='DPI for the saved figure (default: 140).')
+parser.add_argument('--seed', type=int, default=42,
+                    help='RNG seed for the additive noise (default: 42).')
+args = parser.parse_args()
 
-# ── 1. Synthetic CW-radar IQ signal ───────────────────────────────────
-fs = 800.0
-T  = 2.0
-t  = np.arange(0, T, 1/fs)
-N  = len(t)
+np.random.seed(args.seed)
 
-# Body return — constant complex tone (target approaching at +50 Hz Doppler)
-f_body, A_body = 50.0, 0.6
-body = A_body * np.exp(1j * 2*np.pi * f_body * t)
+# ── 1. Synthetic complex signal ───────────────────────────────────────
+fs = 800.0; T = 2.0
+t  = np.arange(0, T, 1/fs); N = len(t)
 
-# Rotor blade — sinusoidal FM, swings between -fd_max and +fd_max
-# Phase: φ(t) = (f_dmax / f_r) · sin(2π f_r t)
-# This is V. Chen's textbook micro-Doppler model
-fd_max, f_rotor, A_rotor = 80.0, 4.0, 1.0
-blade = A_rotor * np.exp(1j * (fd_max/f_rotor) * np.sin(2*np.pi*f_rotor*t))
+f_A, A_A = +30.0, 1.0          # Doppler +30 Hz (approaching)
+f_B, A_B = -40.0, 0.7          # Doppler -40 Hz (receding)
+clean = A_A*np.exp(1j*2*np.pi*f_A*t) + A_B*np.exp(1j*2*np.pi*f_B*t)
 
-clean = body + blade
-
-# Complex AWGN at fixed SNR
 SNR_dB = 15.0
 sig_pow = np.mean(np.abs(clean)**2)
 n_pow   = sig_pow / 10**(SNR_dB/10)
 noise   = np.sqrt(n_pow/2) * (np.random.randn(N) + 1j*np.random.randn(N))
 s       = clean + noise
+print(f"Signal: tones at +{f_A} Hz (A={A_A}) and {f_B} Hz (A={A_B}) · SNR = {SNR_dB:.0f} dB")
 
-print(f"Signal: f_s = {fs} Hz, T = {T} s, N = {N} samples")
-print(f"Body Doppler = +{f_body} Hz   ·   Blade FM ±{fd_max} Hz @ {f_rotor} Hz rotor")
-print(f"SNR_in = {SNR_dB:.1f} dB")
-
-# ── 2. Method 1: REAL-PART VMD ────────────────────────────────────────
-# Treat the IQ signal as if it were real — keep only Re{s}.
-# This loses the sign of the Doppler (real-spectrum is symmetric).
 K, alpha = 2, 2000
+
+# ── 2. M1: Real VMD on Re{s} ──────────────────────────────────────────
 modes_M1, _, _ = VMD(s.real, alpha, 0, K, 0, 1, 1e-7)
-# modes_M1 are REAL signals — their STFT will be ±-symmetric
 
-# ── 3. Method 2: AUGMENTED EMD (Tanaka et al.) ────────────────────────
-# Concatenate Re(s) with the time-flipped Im(s) into one real signal,
-# run EMD ONCE, then recover bivariate (complex) IMFs by splitting back.
-aug = np.concatenate([s.real, s.imag[::-1]])
-emd_imfs = EMD().emd(aug, max_imf=6)
-n_imf = emd_imfs.shape[0]
-biv_imfs = np.array([emd_imfs[k, :N] + 1j * emd_imfs[k, N:][::-1]
-                     for k in range(n_imf)])
-print(f"Method 2: Augmented EMD → {n_imf} bivariate IMFs")
+# ── 3. M2: Channel-wise VMD ───────────────────────────────────────────
+modes_I, om_I, _ = VMD(s.real, alpha, 0, K, 0, 1, 1e-7)
+modes_Q, om_Q, _ = VMD(s.imag, alpha, 0, K, 0, 1, 1e-7)
+order = [int(np.argmin(np.abs(om_Q[-1] - w))) for w in om_I[-1]]
+modes_M2 = modes_I + 1j * modes_Q[order]
 
-# ── 4. Method 3: CHANNEL-WISE VMD (I and Q separately, recombine) ────
-# Apply real VMD to I = Re{s} and Q = Im{s} INDEPENDENTLY, then pair
-# the resulting modes by center-frequency and recombine as I_k + j Q_k.
-# Because  cos(2π f t) + j sin(2π f t) = e^{j 2π f t},  this is enough
-# to recover the SIGN of the Doppler — and is the simplest baseline
-# of the "complex VMD family" found in the literature.
+# ── 4. M3: Bivariate EMD (Rilling–Flandrin 2007) ──────────────────────
+def envelope_complex(z, idx, t_):
+    if len(idx) < 2:
+        return np.zeros_like(z)
+    cs_re = CubicSpline(idx, z[idx].real, extrapolate=True)
+    cs_im = CubicSpline(idx, z[idx].imag, extrapolate=True)
+    return cs_re(t_) + 1j*cs_im(t_)
 
-modes_I, omegas_I, _ = VMD(s.real, alpha, 0, K, 0, 1, 1e-7)
-modes_Q, omegas_Q, _ = VMD(s.imag, alpha, 0, K, 0, 1, 1e-7)
+def bemd_sift(z, n_directions=8, max_sift=30, tol=0.05, fs_=800.0, f_max=60.0):
+    """Sift one bivariate IMF.  Mean envelope = avg over directions of
+    (upper + lower)/2.  KEY: extrema spacing constrained to ≥ 1 carrier
+    period (≈ fs/f_max samples) to avoid cubic-spline overshoot for
+    densely-oscillating signals."""
+    t_ = np.arange(len(z))
+    h  = z.copy()
+    min_dist = max(int(fs_ / f_max), 3)            # minimum samples between extrema
+    for _ in range(max_sift):
+        directions = np.linspace(0, 2*np.pi, n_directions, endpoint=False)
+        mean_envs = []
+        for phi in directions:
+            proj = np.real(h * np.exp(-1j*phi))
+            max_idx, _ = find_peaks(proj, distance=min_dist)
+            min_idx, _ = find_peaks(-proj, distance=min_dist)
+            if len(max_idx) < 4 or len(min_idx) < 4:
+                continue
+            env_upper = envelope_complex(h, max_idx, t_)
+            env_lower = envelope_complex(h, min_idx, t_)
+            mean_envs.append((env_upper + env_lower) / 2)
+        if not mean_envs:
+            return h
+        mean_env = np.mean(mean_envs, axis=0)
+        h_new    = h - mean_env
+        delta    = np.sum(np.abs(h_new - h)**2) / (np.sum(np.abs(h)**2) + 1e-12)
+        h        = h_new
+        if delta < tol:
+            break
+    return h
 
-# Match Q-modes to I-modes by closest centre frequency on the LAST iteration
-omI = omegas_I[-1]; omQ = omegas_Q[-1]
-order = [int(np.argmin(np.abs(omQ - w))) for w in omI]
-modes_Q_aligned = modes_Q[order]
+def bemd(z, max_imf=4):
+    imfs, r = [], z.copy()
+    for _ in range(max_imf):
+        imf = bemd_sift(r)
+        if np.sum(np.abs(imf)**2) < 1e-8:
+            break
+        imfs.append(imf)
+        r = r - imf
+        if np.sum(np.abs(r)**2) < 1e-6 * np.sum(np.abs(z)**2):
+            break
+    return np.array(imfs)
 
-modes_M3 = modes_I + 1j * modes_Q_aligned        # complex modes
-print(f"Method 3: Channel-wise VMD  ω_I = {omI*fs/(2*np.pi)}  →  matched to ω_Q")
+modes_M3 = bemd(s, max_imf=3)
+print(f"M3 (BEMD): {len(modes_M3)} bivariate IMFs")
 
+# ── 5. M4: MCVMD (Hu et al. 2022) ─────────────────────────────────────
+def mcvmd(z, fs_, K, alpha=2000, tol=1e-7):
+    """Upsample → shift +fs/2 → take Re → real VMD → Hilbert → shift back → downsample."""
+    Nz = len(z)
+    z_up = resample(z, 2*Nz)
+    n_up = np.arange(2*Nz)
+    shift_up = np.exp(+1j * np.pi/2 * n_up)
+    z_shifted = z_up * shift_up
+    modes_real, _, _ = VMD(z_shifted.real, alpha, 0, K, 0, 1, tol)
+    modes_analytic = np.array([hilbert(m) for m in modes_real])
+    modes_back = modes_analytic * np.conj(shift_up)
+    return modes_back[:, ::2]
 
+modes_M4 = mcvmd(s, fs, K, alpha)
+print(f"M4 (MCVMD): {K} complex modes")
 
-# ── 5. Helpers for visualisation ──────────────────────────────────────
-def stft_bilateral(x, fs, nperseg=160):
-    """Bilateral STFT (full frequency axis, including negative)."""
-    f, tt, Z = stft(x, fs=fs, nperseg=nperseg, return_onesided=False, boundary=None)
-    f = np.fft.fftshift(f)
-    Z = np.fft.fftshift(Z, axes=0)
-    return f, tt, Z
+# ── 6. Plot — bilateral magnitude spectrum of each recovered mode ─────
+def spec_db(z, fs_):
+    Z = np.fft.fftshift(np.fft.fft(z))
+    f = np.fft.fftshift(np.fft.fftfreq(len(z), 1/fs_))
+    P = 20*np.log10(np.abs(Z) / np.abs(Z).max() + 1e-12)
+    return f, P
 
-def plot_stft(ax, x, fs, title, ylim=(-150, 150), vmax=None):
-    f_, tt_, Z = stft_bilateral(x, fs)
-    P = np.abs(Z)
-    if vmax is None:
-        vmax = P.max()
-    ax.pcolormesh(tt_, f_, P, shading='gouraud', cmap='inferno', vmin=0, vmax=vmax)
-    ax.set_title(title, fontsize=10.5, color='#1E2761', fontweight='bold', loc='left')
-    ax.set_ylim(*ylim)
-    ax.set_ylabel("freq (Hz)", fontsize=9)
+fig = plt.figure(figsize=(14, 11))
+gs  = GridSpec(5, 2, figure=fig, hspace=0.55, wspace=0.18,
+               left=0.06, right=0.98, top=0.95, bottom=0.05)
 
+def plot_spec(ax, z, fs_, title, color):
+    f, P = spec_db(z, fs_)
+    ax.plot(f, P, color=color, lw=1.4)
+    for fe, lab in [(+30, '+30'), (-40, '-40')]:
+        ax.axvline(fe, color='red', ls='--', lw=0.8, alpha=0.5)
+        ax.text(fe, 5, lab, ha='center', fontsize=8.5, color='red', alpha=0.8)
+    ax.set_xlim(-100, 100); ax.set_ylim(-50, 10)
+    ax.set_title(title, fontsize=10.5, color='#1E2761',
+                 fontweight='bold', loc='left')
+    ax.grid(alpha=0.3)
 
-# ── 6. Figure ─────────────────────────────────────────────────────────
-fig = plt.figure(figsize=(13.5, 10), constrained_layout=False)
-gs  = GridSpec(4, 2, figure=fig, hspace=0.50, wspace=0.18,
-               left=0.07, right=0.97, top=0.94, bottom=0.06)
+# Row 1: ground truth + observed
+plot_spec(fig.add_subplot(gs[0, 0]), clean, fs,
+          "(a)  Ground truth  |FFT|² (dB)  —  two signed-Doppler tones", '#1a1a2e')
+plot_spec(fig.add_subplot(gs[0, 1]), s, fs,
+          f"(b)  Observed  (SNR = {SNR_dB:.0f} dB)", '#1a1a2e')
 
-# Row 1: ground truth (clean) + observed noisy
-plot_stft(fig.add_subplot(gs[0, 0]), clean, fs,
-          "(a) Ground truth |STFT|  —  body @ +50 Hz  +  blade FM ±80 Hz")
-plot_stft(fig.add_subplot(gs[0, 1]), s, fs,
-          f"(b) Observed |STFT| with complex AWGN  (SNR = {SNR_dB:.0f} dB)")
+# Row 2: M1
+for k in range(2):
+    plot_spec(fig.add_subplot(gs[1, k]), modes_M1[k], fs,
+              f"({'cd'[k]})  M1  Real VMD on ℜ{{s}} — mode {k+1}  "
+              + ("(mirrored: SIGN LOST)" if k==0 else "(also mirrored)"),
+              '#e74c3c')
 
-# Row 2: Method 1 — Real VMD on Re{s}
-plot_stft(fig.add_subplot(gs[1, 0]), modes_M1[0], fs,
-          "(c)  M1  Real VMD on Re{s} — mode 1  (note ±-symmetric: SIGN LOST)")
-plot_stft(fig.add_subplot(gs[1, 1]), modes_M1[1], fs,
-          "(d)  M1  Real VMD on Re{s} — mode 2  (also ±-symmetric)")
+# Row 3: M2
+for k in range(2):
+    plot_spec(fig.add_subplot(gs[2, k]), modes_M2[k], fs,
+              f"({'ef'[k]})  M2  Channel-wise VMD — mode {k+1}",
+              '#f39c12')
 
-# Row 3: Method 2 — Augmented EMD (show the two strongest bivariate IMFs)
-# Pick the two IMFs with the highest energy
-energies = (np.abs(biv_imfs)**2).sum(axis=1)
-top2 = np.argsort(energies)[::-1][:2]
-plot_stft(fig.add_subplot(gs[2, 0]), biv_imfs[top2[0]], fs,
-          f"(e)  M2  Augmented EMD — bivariate IMF{top2[0]+1}  (signed Doppler preserved)")
-plot_stft(fig.add_subplot(gs[2, 1]), biv_imfs[top2[1]], fs,
-          f"(f)  M2  Augmented EMD — bivariate IMF{top2[1]+1}")
+# Row 4: M3 (BEMD)
+for k in range(min(2, len(modes_M3))):
+    plot_spec(fig.add_subplot(gs[3, k]), modes_M3[k], fs,
+              f"({'gh'[k]})  M3  BEMD (Rilling–Flandrin) — IMF {k+1}",
+              '#2ecc71')
 
-# Row 4: Method 3 — Channel-wise VMD (I & Q separately)
-plot_stft(fig.add_subplot(gs[3, 0]), modes_M3[0], fs,
-          "(g)  M3  Channel-wise VMD (I, Q sep.) — complex mode 1  (signed Doppler)")
-plot_stft(fig.add_subplot(gs[3, 1]), modes_M3[1], fs,
-          "(h)  M3  Channel-wise VMD — complex mode 2")
+# Row 5: M4 (MCVMD)
+for k in range(2):
+    plot_spec(fig.add_subplot(gs[4, k]), modes_M4[k], fs,
+              f"({'ij'[k]})  M4  MCVMD (Hu et al. 2022) — mode {k+1}",
+              '#3498db')
 
-# x-labels on bottom row
 for ax in fig.axes[-2:]:
-    ax.set_xlabel("time (s)", fontsize=9)
+    ax.set_xlabel("frequency (Hz)", fontsize=10)
+for k in (0, 2, 4, 6, 8):
+    fig.axes[k].set_ylabel("|FFT|² (dB)", fontsize=9.5)
 
-fig.suptitle("CW-radar IQ decomposition — three approaches compared",
+fig.suptitle("Complex-IQ decomposition — 4 methods on two signed-Doppler tones",
              fontsize=13, fontweight='bold', y=0.985)
 
 import os
-os.makedirs('/mnt/user-data/outputs', exist_ok=True)
-out = '/mnt/user-data/outputs/radar_iq_benchmark.png'
-plt.savefig(out, dpi=140, bbox_inches='tight', facecolor='white')
-print(f"\nFigure saved → {out}")
+if args.save:
+    os.makedirs(os.path.dirname(os.path.abspath(args.save)) or '.', exist_ok=True)
+    plt.savefig(args.save, dpi=args.dpi, bbox_inches='tight', facecolor='white')
+    print(f"Figure saved → {args.save}")
+else:
+    plt.show()
