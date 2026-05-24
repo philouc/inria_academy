@@ -46,7 +46,7 @@ See the [usage guide](docs/usage.md) for more details.
 
 ```
 inria_academy/
-├── docs/                       MkDocs documentation sources
+├── docs/sphinx/                Sphinx documentation sources
 ├── examples/                   Demo scripts (the gallery)
 │   ├── 1_Reminder_Fourier/     Fourier domain refresher
 │   ├── 2_Reminder_Wavelets/    Wavelet bases, denoising, long memory
@@ -66,18 +66,19 @@ inria_academy/
 
 ## Documentation
 
-The documentation is generated with [MkDocs](https://www.mkdocs.org/) and
-the [Material](https://squidfunk.github.io/mkdocs-material/) theme, and is
-published on [GitHub Pages](https://philouc.github.io/inria_academy/) after
-every push to `main`.
+The documentation is generated with [Sphinx](https://www.sphinx-doc.org/) and
+the [furo](https://pradyunsg.me/furo/) theme, and is published on
+[GitHub Pages](https://philouc.github.io/inria_academy/) after every push
+to `main`.
 
 To preview it locally:
 
 ```bash
-uv run mkdocs serve
+uv sync --group docs
+cd docs/sphinx && make html
 ```
 
-Then open <http://localhost:8000>.
+Then open `_build/html/index.html` in your browser.
 
 ## Citation
 

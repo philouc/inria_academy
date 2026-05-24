@@ -37,9 +37,6 @@ dependencies = [
 dev = [
     "pytest>=8.0",
     "ruff>=0.5",
-    "mkdocs-material>=9.7",
-    "mkdocs-gallery>=0.10",
-    "pymdown-extensions>=10.0",
 ]
 docs = [
     "sphinx>=7.0",
