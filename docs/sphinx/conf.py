@@ -178,3 +178,60 @@ copybutton_only_copy_prompt_lines = False
 
 # -- todo --------------------------------------------------------------------
 todo_include_todos = False
+
+
+# -- sphinx-gallery (DORMANT) ------------------------------------------------
+# This block configures sphinx-gallery to scan the project's `examples/`
+# tree and generate an auto-rendered gallery (with figures captured from
+# matplotlib at build time). It is NOT active by default: the static
+# `reference.rst` page with pre-rendered PNGs under
+# `_static/gallery/` is what currently ships.
+#
+# To enable the live gallery:
+#   1. Add `sphinx-gallery>=0.15` to the `docs` dependency group in
+#      pyproject.toml (and rerun `uv sync --group docs`).
+#   2. Add `sphinx_gallery.gen_gallery` to the `extensions` list above.
+#   3. Make sure every runtime dependency of the example scripts is
+#      installed in the doc-build env (PyEMD/EMD-signal, ssqueezepy,
+#      vmdpy, neurokit2, ...) — autodoc_mock_imports does NOT apply at
+#      gallery-execution time.
+#   4. Remove or update the `reference.rst` page so it does not collide
+#      with the auto-generated gallery output.
+#
+# The config below mirrors what the project's previous `mkdocs.yml`
+# gallery block declared, adapted to sphinx-gallery semantics.
+sphinx_gallery_conf = {
+    # Where the example scripts live (relative to this conf.py file)
+    "examples_dirs": [
+        "../../examples/1_Reminder_Fourier",
+        "../../examples/2_Reminder_Wavelets",
+        "../../examples/3_STFT_WVD_SPWVD",
+        "../../examples/4_EMD_EEMD_CEEMDAN",
+        "../../examples/5_SWT",
+        "../../examples/6_VMD",
+        "../../examples/7_MVMD",
+        "../../examples/8_Complex_EMD_VMD",
+    ],
+    # Where the generated .rst + images land (relative to this conf.py)
+    "gallery_dirs": [
+        "generated/gallery/1_Reminder_Fourier",
+        "generated/gallery/2_Reminder_Wavelets",
+        "generated/gallery/3_STFT_WVD_SPWVD",
+        "generated/gallery/4_EMD_EEMD_CEEMDAN",
+        "generated/gallery/5_SWT",
+        "generated/gallery/6_VMD",
+        "generated/gallery/7_MVMD",
+        "generated/gallery/8_Complex_EMD_VMD",
+    ],
+    # Match all .py scripts (the project uses `01.foo.py` naming, not the
+    # default `plot_*.py` pattern that sphinx-gallery expects).
+    "filename_pattern":   r".*\.py$",
+    # Same as the mkdocs-gallery setup: don't execute by default
+    "plot_gallery":       False,
+    # If you flip plot_gallery to True, set these to control execution:
+    "run_stale_examples": False,
+    "abort_on_example_error":     False,
+    "only_warn_on_example_error": True,
+    "thumbnail_size":     (400, 280),
+    "download_all_examples": True,
+}
