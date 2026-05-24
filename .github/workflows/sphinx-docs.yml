@@ -1,0 +1,54 @@
+name: Build & deploy Sphinx documentation
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # bouton "Run workflow" dans l'onglet Actions
+
+# Permissions requises pour publier sur Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Une seule exécution simultanée — annule les builds obsolètes
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8
+        with:
+          enable-cache: true
+
+      - name: Set up Python from pyproject.toml
+        run: uv python install
+
+      - name: Install docs dependencies
+        run: uv sync --group docs
+
+      - name: Build Sphinx HTML
+        run: uv run sphinx-build -b html docs/sphinx docs/sphinx/_build/html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/sphinx/_build/html
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
