@@ -17,7 +17,7 @@ channels, MVMD finds K modes such that:
        Σ_k u_{k,c}(t) = x_c(t)  for each c.
 
 The variational problem and its ADMM solution are direct extensions of
-univariate VMD.  The key difference is the frequency update:
+univariate VMD.  The key difference is the frequency update::
 
     ω_k^{n+1}  =  Σ_c ∫ ω |û_{k,c}(ω)|² dω
                   ──────────────────────────

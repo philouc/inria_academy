@@ -1,0 +1,20 @@
+# Sphinx documentation build dependencies for inria_academy.
+# Install with:
+#   uv pip install -r docs/sphinx/requirements.txt
+# or:
+#   pip install -r docs/sphinx/requirements.txt
+#
+# The runtime scientific dependencies (numpy, scipy, matplotlib, ...) are
+# installed via `uv sync` from the main pyproject.toml; they are imported
+# by the package modules at autodoc time.
+#
+# Heavy or hard-to-install runtime deps that autodoc does NOT need
+# (PyEMD, ssqueezepy, vmdpy, neurokit2, pymultifracs) are mocked in
+# conf.py via `autodoc_mock_imports`, so they are not listed here.
+
+sphinx>=7.0
+furo>=2024.1
+myst-parser>=2.0
+sphinx-copybutton>=0.5
+sphinx-design>=0.5
+sphinx-autobuild>=2024.0   # for `make livehtml` (optional)

@@ -1,0 +1,31 @@
+/* Inria Academy — Sphinx custom styles
+ * Small accent tweaks on top of the Furo theme.
+ */
+
+/* Slightly tighter list-table cells for the gallery reference page */
+table.docutils td, table.docutils th {
+    padding: 0.4em 0.7em;
+}
+
+/* Make module headers a bit more prominent */
+h1 .sig-prename.descclassname {
+    color: var(--color-foreground-secondary);
+    font-weight: 400;
+}
+
+/* API parameter lists: less aggressive vertical spacing */
+dl.field-list > dt {
+    padding-top: 0.25em;
+}
+
+/* sphinx-design card hover lift */
+.sd-card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.15s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Tighter code blocks */
+.highlight pre {
+    line-height: 1.45;
+}

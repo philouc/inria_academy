@@ -47,3 +47,7 @@ Thumbs.db
 
 # ─── mkdocs-gallery generated output ─────────────────────────────────────────
 docs/generated/
+
+# ─── Sphinx build outputs ─────────────────────────────────────────
+docs/sphinx/_build/
+docs/sphinx/api/generated/
