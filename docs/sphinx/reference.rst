@@ -285,24 +285,47 @@ IQ data). Two benchmark scripts, no numeric prefix.
 References
 ----------
 
-* Dragomiretskiy, K. & Zosso, D. (2014). *Variational Mode Decomposition.*
-  IEEE Transactions on Signal Processing, 62(3), 531–544.
-* ur Rehman, N. & Aftab, H. (2019). *Multivariate Variational Mode
-  Decomposition.* IEEE Transactions on Signal Processing.
+**Foundational decompositions**
+
+* Huang, N. E. *et al.* (1998). *The Empirical Mode Decomposition and the
+  Hilbert spectrum for nonlinear and non-stationary time series analysis.*
+  Proceedings of the Royal Society of London A, 454, 903–995.
 * Wu, Z. & Huang, N. E. (2009). *Ensemble Empirical Mode Decomposition: A
   Noise-Assisted Data Analysis Method.* Advances in Adaptive Data Analysis,
   1(1), 1–41.
 * Daubechies, I., Lu, J. & Wu, H.-T. (2011). *Synchrosqueezed wavelet
   transforms: An empirical mode decomposition-like tool.* Applied and
   Computational Harmonic Analysis, 30(2), 243–261.
+* Dragomiretskiy, K. & Zosso, D. (2014). *Variational Mode Decomposition.*
+  IEEE Transactions on Signal Processing, 62(3), 531–544.
+* ur Rehman, N. & Aftab, H. (2019). *Multivariate Variational Mode
+  Decomposition.* IEEE Transactions on Signal Processing, 67(23),
+  6039–6052.
+
+**Complex-valued and multivariate extensions (module 8)**
+
+* Tanaka, T. & Mandic, D. P. (2007). *Complex Empirical Mode Decomposition.*
+  IEEE Signal Processing Letters, 14(2), 101–104.
 * Rilling, G., Flandrin, P., Gonçalves, P. & Lilly, J. M. (2007).
   *Bivariate Empirical Mode Decomposition.* IEEE Signal Processing
   Letters, 14(12), 936–939.
-* Hu, X. et al. (2022). *Complex Variational Mode Decomposition.* IEEE
-  Signal Processing Letters.
-* Akaike, H. (1974). IEEE Trans. Aut. Control 19(6), 716–723.
+* Wang, Y., Liu, F., Jiang, Z., He, S. & Mo, Q. (2017). *Complex
+  variational mode decomposition for signal processing applications.*
+  Mechanical Systems and Signal Processing, 86, 75–85.
+* Cui, X., Huang, J., Li, C. & Zhao, Y. (2022). *Three-dimensional
+  instantaneous orbit map for rotor-bearing system based on a novel
+  multivariate complex variational mode decomposition algorithm.*
+  Mechanical Systems and Signal Processing, 178, 109211.
+
+**K-selection criteria (information criteria and knee detection)**
+
+* Akaike, H. (1974). *A new look at the statistical model identification.*
+  IEEE Transactions on Automatic Control, 19(6), 716–723.
 * Schwarz, G. (1978). *Estimating the dimension of a model.* Annals of
-  Statistics 6(2), 461–464.
+  Statistics, 6(2), 461–464.
 * Bandt, C. & Pompe, B. (2002). *Permutation entropy: a natural complexity
-  measure for time series.* Phys. Rev. Lett. 88(17), 174102.
-* Satopaa, V. et al. (2011). *Finding a kneedle in a haystack.* ICDCSW.
+  measure for time series.* Physical Review Letters, 88(17), 174102.
+* Satopaa, V., Albrecht, J., Irwin, D. & Raghavan, B. (2011). *Finding a
+  "Kneedle" in a Haystack: Detecting Knee Points in System Behavior.*
+  31st International Conference on Distributed Computing Systems Workshops
+  (ICDCSW), 166–171.
