@@ -8,7 +8,7 @@
    M1 — Naive REAL VMD on Re{s}                  (loses sign of Doppler)
    M2 — Channel-wise VMD (I, Q independent)      (simplest complex-aware)
    M3 — Bivariate EMD (Rilling–Flandrin 2007)    (rotating envelopes)
-   M4 — MCVMD (Hu et al. 2022)                   (upsample + shift + VMD)
+   M4 — MCVMD (heterodyne trick)                 (upsample + shift + real VMD)
 
  Test signal  (length 2 s @ fs = 800 Hz):
    s(t) = exp(+j 2π·30 t) + 0.7 · exp(-j 2π·40 t) + complex AWGN
@@ -125,7 +125,7 @@ def bemd(z, max_imf=4):
 modes_M3 = bemd(s, max_imf=3)
 print(f"M3 (BEMD): {len(modes_M3)} bivariate IMFs")
 
-# ── 5. M4: MCVMD (Hu et al. 2022) ─────────────────────────────────────
+# ── 5. M4: MCVMD (heterodyne trick: upsample + spectral shift + VMD) ──
 def mcvmd(z, fs_, K, alpha=2000, tol=1e-7):
     """Upsample → shift +fs/2 → take Re → real VMD → Hilbert → shift back → downsample."""
     Nz = len(z)
@@ -191,7 +191,7 @@ for k in range(min(2, len(modes_M3))):
 # Row 5: M4 (MCVMD)
 for k in range(2):
     plot_spec(fig.add_subplot(gs[4, k]), modes_M4[k], fs,
-              f"({'ij'[k]})  M4  MCVMD (Hu et al. 2022) — mode {k+1}",
+              f"({'ij'[k]})  M4  MCVMD (heterodyne + VMD) — mode {k+1}",
               '#3498db')
 
 for ax in fig.axes[-2:]:

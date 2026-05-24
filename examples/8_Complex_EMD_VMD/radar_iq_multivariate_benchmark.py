@@ -5,12 +5,14 @@
  Companion to radar_iq_benchmark.py. Compares two strategies for a
  2-channel complex (IQ) radar signal:
 
-   • CVMD per channel — apply Complex VMD (Hu et al. 2022) to each
-                        channel independently. No cross-channel
+   • CVMD per channel — apply a heterodyne-based Complex VMD to each
+                        channel independently (upsample, frequency-shift,
+                        real VMD, Hilbert, shift back). No cross-channel
                         constraint → mode indices may swap across
                         channels when one tone dominates differently.
-   • MCVMD            — Multivariate Complex VMD: Hu et al. trick +
-                        MVMD (ur Rehman & Aftab 2019). Forces a SHARED
+   • MCVMD            — Multivariate Complex VMD: same heterodyne trick
+                        per channel + MVMD (ur Rehman & Aftab 2019) on
+                        the upsampled real part. Forces a SHARED
                         set of K center frequencies ω_k across all
                         channels → mode k indexes the same physical
                         target on every channel.
@@ -146,10 +148,10 @@ def mvmd(X, alpha, tau, K, DC=False, init=1, tol=1e-7, max_iter=500):
 
 
 # ─────────────────────────────────────────────────────────────────────
-#  Complex VMD (Hu et al. 2022) — per-channel
+#  Complex VMD (heterodyne trick) — per-channel
 # ─────────────────────────────────────────────────────────────────────
 def cvmd(z, fs_, K, alpha=2000, tol=1e-7):
-    """Hu et al. 2022 trick: upsample×2 → shift +fs/2 → real VMD → Hilbert → shift back → downsample."""
+    """Heterodyne trick: upsample×2 → shift +fs/2 → real VMD → Hilbert → shift back → downsample."""
     Nz = len(z)
     z_up = resample(z, 2 * Nz)
     n_up = np.arange(2 * Nz)
@@ -162,7 +164,7 @@ def cvmd(z, fs_, K, alpha=2000, tol=1e-7):
 
 
 # ─────────────────────────────────────────────────────────────────────
-#  Multivariate Complex VMD — Hu trick per channel + MVMD shared ω
+#  Multivariate Complex VMD — heterodyne trick per channel + MVMD shared ω
 # ─────────────────────────────────────────────────────────────────────
 def mcvmd(X, fs_, K, alpha=2000, tol=1e-7):
     """X: (N, C) complex. Returns u (K, N, C) complex, omega_hz (K,)."""
